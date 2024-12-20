@@ -43,6 +43,7 @@ namespace Inzynierka.Infrastructure.Persistance
                     .HasMaxLength(9);
 
                 entity.Property(c => c.Email)
+                    .IsRequired()
                     .HasMaxLength(100);
 
                 entity.Property(c => c.CreatedAt)

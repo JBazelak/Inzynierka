@@ -30,9 +30,10 @@ namespace Inzynierka.UI.DTOs
         [StringLength(9, ErrorMessage = "National Business Registry Number must be 9 characters.")]
         public string? NationalBusinessRegistryNumber { get; set; }
 
+        [Required(ErrorMessage = "Email is required")]
         [StringLength(100, ErrorMessage = "Email cannot exceed 100 characters.")]
         [EmailAddress(ErrorMessage = "Invalid email address format.")]
-        public string? Email { get; set; }
+        public string Email { get; set; } = string.Empty;
 
         public DateTime CreatedAt { get; set; }
     }

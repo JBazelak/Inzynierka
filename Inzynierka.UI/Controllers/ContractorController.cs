@@ -35,15 +35,22 @@ public class ContractorController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<ContractorDto>> Create([FromBody] ContractorDto contractorDto)
+    public async Task<IActionResult> Create([FromBody] ContractorDto contractorDto)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
 
-        var createdContractor = await _contractorService.CreateAsync(contractorDto);
-        return CreatedAtAction(nameof(GetById), new { id = createdContractor.Id }, createdContractor);
+        try
+        {
+            var createdContractor = await _contractorService.CreateAsync(contractorDto);
+            return CreatedAtAction(nameof(GetById), new { id = createdContractor.Id }, createdContractor);
+        }
+        catch (ArgumentException ex)
+        {
+            return Conflict(ex.Message); // 409 Conflict dla już istniejących danych
+        }
     }
 
     [HttpPut("{id}")]
@@ -59,9 +66,13 @@ public class ContractorController : ControllerBase
             await _contractorService.UpdateAsync(id, updateContractorDto);
             return NoContent();
         }
-        catch (Exception ex) when (ex is KeyNotFoundException || ex is ArgumentException)
+        catch (ArgumentException ex)
         {
-            return BadRequest(ex.Message);
+            return Conflict(ex.Message); // 409 Conflict
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(ex.Message);
         }
     }
 
