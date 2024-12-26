@@ -29,6 +29,6 @@ namespace Inzynierka.Core.Entities
         public DateTime LastUpdated { get; set; } = DateTime.UtcNow;
 
         [ForeignKey("ProjectId")]
-        public Project Project { get; set; } = new Project();
+        public Project Project { get; set; }
     }
 }

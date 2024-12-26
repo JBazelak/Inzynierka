@@ -1,81 +1,136 @@
-﻿using AutoMapper;
-using Inzynierka.Infrastructure.Persistance;
-using Inzynierka.Core.Entities;
-using Inzynierka.UI.DTOs;
+﻿using Inzynierka.UI.DTOs;
+using Inzynierka.UI.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-
 
 namespace Inzynierka.UI.Controllers
 {
-    [Route("api/projects")]
+    [Route("api/contractors/{contractorId}/projects")]
     [ApiController]
     public class ProjectController : ControllerBase
     {
-        private readonly AppDbContext _context;
-        private readonly IMapper _mapper;
+        private readonly IProjectService _projectService;
 
-        public ProjectController(AppDbContext context, IMapper mapper)
+        public ProjectController(IProjectService projectService)
         {
-            _context = context;
-            _mapper = mapper;
+            _projectService = projectService;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ProjectDto>>> GetAll()
+        public async Task<ActionResult<IEnumerable<CreateProjectDto>>> GetAll(int contractorId)
         {
-            var projects = await _context.Projects.ToListAsync();
-            return Ok(_mapper.Map<IEnumerable<ProjectDto>>(projects));
+            var projects = await _projectService.GetAllAsync(contractorId);
+            return Ok(projects);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ProjectDto>> GetById(int id)
+        public async Task<ActionResult<CreateProjectDto>> GetById(int contractorId, int id)
         {
-            var project = await _context.Projects.FindAsync(id);
-            if (project == null)
-                return NotFound();
-
-            return Ok(_mapper.Map<ProjectDto>(project));
+            try
+            {
+                var project = await _projectService.GetByIdAsync(contractorId, id);
+                return Ok(project);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return NotFound(e.Message);
+            }
         }
 
         [HttpPost]
-        public async Task<ActionResult> Create(ProjectDto projectDto)
+        public async Task<ActionResult> Create(int contractorId, [FromBody] CreateProjectDto projectDto)
         {
-            var project = _mapper.Map<Project>(projectDto);
-            _context.Projects.Add(project);
-            await _context.SaveChangesAsync();
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-            var createdDto = _mapper.Map<ProjectDto>(project);
-            return CreatedAtAction(nameof(GetById), new { id = project.Id }, createdDto);
+            try
+            {
+                // Wywołanie serwisu
+                var project = await _projectService.CreateAsync(contractorId, projectDto);
+
+                // Zwracamy odpowiedź z URL do nowego zasobu
+                return CreatedAtAction(nameof(GetById), new { contractorId, id = project.Id }, project);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return NotFound(e.Message);
+            }
         }
 
+
+
+
         [HttpPut("{id}")]
-        public async Task<ActionResult> Update(int id, ProjectDto projectDto)
+        public async Task<ActionResult> Update(int contractorId, int id, [FromBody] CreateProjectDto projectDto)
         {
-            if (id != projectDto.Id)
-                return BadRequest();
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-            var project = await _context.Projects.FindAsync(id);
-            if (project == null)
-                return NotFound();
-
-            _mapper.Map(projectDto, project);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            try
+            {
+                await _projectService.UpdateAsync(contractorId, id, projectDto);
+                return NoContent();
+            }
+            catch (KeyNotFoundException e)
+            {
+                return NotFound(e.Message);
+            }
+            catch (ArgumentException e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<ActionResult> Delete(int contractorId, int id)
         {
-            var project = await _context.Projects.FindAsync(id);
-            if (project == null)
-                return NotFound();
-
-            _context.Projects.Remove(project);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            try
+            {
+                await _projectService.DeleteAsync(contractorId, id);
+                return NoContent();
+            }
+            catch (KeyNotFoundException e)
+            {
+                return NotFound(e.Message);
+            }
         }
+        [HttpPost("{projectId}/materials")]
+        public async Task<ActionResult> AddMaterial(int contractorId, int projectId, [FromBody] CreateMaterialDto createMaterialDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            try
+            {
+                var material = await _projectService.AddMaterialAsync(contractorId, projectId, createMaterialDto);
+                return Created($"api/contractors/{contractorId}/projects/{projectId}/materials/{material.Id}", material);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return NotFound(e.Message);
+            }
+        }
+
+        [HttpPut("{projectId}/materials/{materialId}")]
+        public async Task<ActionResult> UpdateMaterial(int contractorId, int projectId, int materialId, [FromBody] UpdateMaterialDto updateMaterialDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            try
+            {
+                await _projectService.UpdateMaterialAsync(contractorId, projectId, materialId, updateMaterialDto);
+                return NoContent();
+            }
+            catch (KeyNotFoundException e)
+            {
+                return NotFound(e.Message);
+            }
+            catch (ArgumentException e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+
     }
 }

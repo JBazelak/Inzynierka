@@ -18,7 +18,7 @@ namespace Inzynierka.Core.Entities
         public int ContractorId { get; set; }
 
         [ForeignKey("ContractorId")]
-        public Contractor Contractor { get; set; } = new Contractor();
+        public Contractor Contractor { get; set; }
 
         public ICollection<Material> Materials { get; set; } = new List<Material>();
     }
