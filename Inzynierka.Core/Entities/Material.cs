@@ -20,6 +20,10 @@ namespace Inzynierka.Core.Entities
         public string Unit { get; set; } = string.Empty;
 
         [Required]
+        [Range(0.01, double.MaxValue)]
+        public decimal PricePerUnit { get; set; }
+
+        [Required]
         public int ProjectId { get; set; }
 
         [StringLength(255)]
@@ -30,5 +34,8 @@ namespace Inzynierka.Core.Entities
 
         [ForeignKey("ProjectId")]
         public Project Project { get; set; }
+
+        [NotMapped]
+        public decimal TotalCost => Quantity * PricePerUnit;
     }
 }

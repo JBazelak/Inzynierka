@@ -26,6 +26,10 @@ namespace Inzynierka.Infrastructure.Persistance
                     .IsRequired()
                     .HasMaxLength(50);
 
+                entity.Property(c => c.Password)
+                    .IsRequired()
+                    .HasMaxLength(255);
+
                 entity.Property(c => c.CompanyName)
                     .IsRequired()
                     .HasMaxLength(100);

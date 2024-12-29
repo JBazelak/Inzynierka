@@ -21,5 +21,9 @@ namespace Inzynierka.Core.Entities
         public Contractor Contractor { get; set; }
 
         public ICollection<Material> Materials { get; set; } = new List<Material>();
+
+        [NotMapped]
+        public decimal ProjectCost => Materials?.Sum(m => m.TotalCost) ?? 0;
     }
+
 }

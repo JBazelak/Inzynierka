@@ -5,6 +5,9 @@ namespace Inzynierka.Core.Entities
     public class Contractor
     {
         public int Id { get; set; }
+        [Required]
+        [StringLength(255)]
+        public string Password { get; set; } = string.Empty;
 
         [Required]
         [StringLength(50)]

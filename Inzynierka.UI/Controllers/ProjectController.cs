@@ -1,9 +1,11 @@
 ﻿using Inzynierka.UI.DTOs;
+using Inzynierka.UI.Filters;
 using Inzynierka.UI.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Inzynierka.UI.Controllers
 {
+    [SessionAuthorization]
     [Route("api/contractors/{contractorId}/projects")]
     [ApiController]
     public class ProjectController : ControllerBase
@@ -13,13 +15,6 @@ namespace Inzynierka.UI.Controllers
         public ProjectController(IProjectService projectService)
         {
             _projectService = projectService;
-        }
-
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<CreateProjectDto>>> GetAll(int contractorId)
-        {
-            var projects = await _projectService.GetAllAsync(contractorId);
-            return Ok(projects);
         }
 
         [HttpGet("{id}")]
@@ -56,9 +51,6 @@ namespace Inzynierka.UI.Controllers
             }
         }
 
-
-
-
         [HttpPut("{id}")]
         public async Task<ActionResult> Update(int contractorId, int id, [FromBody] CreateProjectDto projectDto)
         {
@@ -93,6 +85,7 @@ namespace Inzynierka.UI.Controllers
                 return NotFound(e.Message);
             }
         }
+
         [HttpPost("{projectId}/materials")]
         public async Task<ActionResult> AddMaterial(int contractorId, int projectId, [FromBody] CreateMaterialDto createMaterialDto)
         {

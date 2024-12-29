@@ -18,47 +18,20 @@ namespace Inzynierka.UI.ControllerServices
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<ContractorDto>> GetAllAsync()
-        {
-            var contractors = await _context.Contractors.ToListAsync();
-            return _mapper.Map<IEnumerable<ContractorDto>>(contractors);
-        }
 
         public async Task<ContractorDto> GetByIdAsync(int id)
         {
-            var contractor = await _context.Contractors.FindAsync(id);
+            var contractor = await _context.Contractors
+                .Include(c => c.Projects)
+                .FirstOrDefaultAsync(c => c.Id == id);
+
             if (contractor == null)
-            {
                 throw new KeyNotFoundException("Contractor not found.");
-            }
-            return _mapper.Map<ContractorDto>(contractor);
-        }
-
-        public async Task<ContractorDto> CreateAsync(ContractorDto contractorDto)
-        {
-            if (await IsEmailTakenAsync(contractorDto.Email))
-            {
-                throw new ArgumentException("Email is already taken.");
-            }
-
-            if (await IsPhoneNumberTakenAsync(contractorDto.PhoneNumber))
-            {
-                throw new ArgumentException("Phone number is already taken.");
-            }
-
-            if (await IsCompanyNameTakenAsync(contractorDto.CompanyName))
-            {
-                throw new ArgumentException("Company name is already taken.");
-            }
-
-            var contractor = _mapper.Map<Contractor>(contractorDto);
-            _context.Contractors.Add(contractor);
-            await _context.SaveChangesAsync();
 
             return _mapper.Map<ContractorDto>(contractor);
         }
 
-
+        
         public async Task UpdateAsync(int id, UpdateContractorDto updateContractorDto)
         {
             var contractor = await _context.Contractors.FindAsync(id);

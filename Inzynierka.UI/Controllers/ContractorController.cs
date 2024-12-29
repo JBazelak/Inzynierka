@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Inzynierka.UI.DTOs;
 using Inzynierka.UI.Interfaces;
+using Inzynierka.UI.Filters;
 
 [ApiController]
 [Route("api/contractors")]
@@ -11,13 +12,6 @@ public class ContractorController : ControllerBase
     public ContractorController(IContractorService contractorService)
     {
         _contractorService = contractorService;
-    }
-
-    [HttpGet]
-    public async Task<ActionResult<IEnumerable<ContractorDto>>> GetAll()
-    {
-        var contractors = await _contractorService.GetAllAsync();
-        return Ok(contractors);
     }
 
     [HttpGet("{id}")]
@@ -34,25 +28,7 @@ public class ContractorController : ControllerBase
         }
     }
 
-    [HttpPost]
-    public async Task<IActionResult> Create([FromBody] ContractorDto contractorDto)
-    {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
-        }
-
-        try
-        {
-            var createdContractor = await _contractorService.CreateAsync(contractorDto);
-            return CreatedAtAction(nameof(GetById), new { id = createdContractor.Id }, createdContractor);
-        }
-        catch (ArgumentException ex)
-        {
-            return Conflict(ex.Message); // 409 Conflict dla już istniejących danych
-        }
-    }
-
+    [SessionAuthorization]
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, [FromBody] UpdateContractorDto updateContractorDto)
     {
@@ -68,7 +44,7 @@ public class ContractorController : ControllerBase
         }
         catch (ArgumentException ex)
         {
-            return Conflict(ex.Message); // 409 Conflict
+            return Conflict(ex.Message);
         }
         catch (KeyNotFoundException ex)
         {
@@ -76,6 +52,7 @@ public class ContractorController : ControllerBase
         }
     }
 
+    [SessionAuthorization]
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {

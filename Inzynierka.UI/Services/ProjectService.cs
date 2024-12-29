@@ -134,5 +134,18 @@ namespace Inzynierka.UI.Services
             _context.Materials.Remove(material);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<decimal> GetProjectCostAsync(int projectId)
+        {
+            var project = await _context.Projects
+                .Include(p => p.Materials)
+                .FirstOrDefaultAsync(p => p.Id == projectId);
+
+            if (project == null)
+                throw new KeyNotFoundException("Project not found.");
+
+            return project.Materials.Sum(m => m.TotalCost);
+        }
+
     }
 }
