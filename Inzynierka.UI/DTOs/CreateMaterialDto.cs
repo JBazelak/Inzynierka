@@ -18,5 +18,9 @@ namespace Inzynierka.UI.DTOs
 
         [StringLength(255, ErrorMessage = "Attachment Path cannot exceed 255 characters.")]
         public string? AttachmentPath { get; set; }
+
+        [Required]
+        [Range(0.01, double.MaxValue)]
+        public decimal PricePerUnit { get; set; }
     }
 }

@@ -13,6 +13,8 @@ namespace Inzynierka.UI.Mappings
                 .ForMember(dest => dest.Projects, opt => opt.MapFrom(src => src.Projects));
             CreateMap<ContractorDto, Contractor>();
             CreateMap<RegisterContractorDto, Contractor>().ReverseMap();
+            CreateMap<UpdateContractorDto, Contractor>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
             // Material mappings
             CreateMap<Material, MaterialDto>().ReverseMap();

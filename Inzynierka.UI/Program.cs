@@ -3,6 +3,8 @@ using Inzynierka.UI.Interfaces;
 using Inzynierka.UI.ControllerServices;
 using Inzynierka.UI.Mappings;
 using Inzynierka.UI.Services;
+using Microsoft.AspNetCore.Http.Features;
+using Inzynierka.Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +22,12 @@ builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.AddScoped<IContractorService, ContractorService>();
 builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IMaterialService, MaterialService>();
+builder.Services.AddScoped<PdfReportService>();
+builder.Services.AddDirectoryBrowser();
+
+QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
+QuestPDF.Settings.EnableDebugging = true;
 
 var app = builder.Build();
 

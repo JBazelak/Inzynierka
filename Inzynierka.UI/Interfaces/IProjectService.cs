@@ -12,6 +12,5 @@ namespace Inzynierka.UI.Interfaces
 
         Task<MaterialDto> AddMaterialAsync(int contractorId, int projectId, CreateMaterialDto createMaterialDto);
         Task UpdateMaterialAsync(int contractorId, int projectId, int materialId, UpdateMaterialDto updateMaterialDto);
-        Task DeleteMaterialAsync(int contractorId, int projectId, int materialId);
     }
 }

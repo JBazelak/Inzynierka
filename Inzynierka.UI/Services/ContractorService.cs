@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Inzynierka.Infrastructure.Persistance;
-using Inzynierka.Core.Entities;
 using Inzynierka.UI.Interfaces;
 using Inzynierka.UI.DTOs;
 using Microsoft.EntityFrameworkCore;
@@ -73,6 +72,10 @@ namespace Inzynierka.UI.ControllerServices
 
             _context.Contractors.Remove(contractor);
             await _context.SaveChangesAsync();
+        }
+        public async Task<bool> ContractorExistsAsync(int contractorId)
+        {
+            return await _context.Contractors.AnyAsync(c => c.Id == contractorId);
         }
         private async Task<bool> IsEmailTakenAsync(string email, int? excludeId = null)
         {

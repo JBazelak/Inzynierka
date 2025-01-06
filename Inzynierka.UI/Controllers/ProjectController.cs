@@ -39,10 +39,8 @@ namespace Inzynierka.UI.Controllers
 
             try
             {
-                // Wywołanie serwisu
                 var project = await _projectService.CreateAsync(contractorId, projectDto);
 
-                // Zwracamy odpowiedź z URL do nowego zasobu
                 return CreatedAtAction(nameof(GetById), new { contractorId, id = project.Id }, project);
             }
             catch (KeyNotFoundException e)
@@ -123,7 +121,5 @@ namespace Inzynierka.UI.Controllers
                 return BadRequest(e.Message);
             }
         }
-
-
     }
 }
