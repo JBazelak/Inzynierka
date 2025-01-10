@@ -15,6 +15,8 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true; 
 });
 
+
+
 builder.Services.AddRazorPages();
 builder.Services.AddControllers();
 builder.Services.AddInfrastructure(builder.Configuration);
@@ -25,6 +27,7 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IMaterialService, MaterialService>();
 builder.Services.AddScoped<PdfReportService>();
 builder.Services.AddDirectoryBrowser();
+builder.Services.AddHttpClient();
 
 QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
 QuestPDF.Settings.EnableDebugging = true;
@@ -39,11 +42,11 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
-
 app.UseAuthorization();
 app.UseSession();
 app.MapRazorPages();
