@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Inzynierka.UI.DTOs
 {
@@ -7,32 +6,32 @@ namespace Inzynierka.UI.DTOs
     {
         public int Id { get; set; }
 
-        [Required(ErrorMessage = "First name is required.")]
-        [StringLength(50, ErrorMessage = "First name cannot exceed 50 characters.")]
+        [Required(ErrorMessage = "Imie jest wymagane")]
+        [StringLength(50, ErrorMessage = "Imię nie może być dłuższe niż 50 znaków")]
         public string FirstName { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "Last name is required.")]
-        [StringLength(50, ErrorMessage = "Last name cannot exceed 50 characters.")]
+        [Required(ErrorMessage = "Nazwisko jest wymagane")]
+        [StringLength(50, ErrorMessage = "Nazwisko może zawierać max 50 znaków")]
         public string LastName { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "Company name is required.")]
-        [StringLength(100, ErrorMessage = "Company name cannot exceed 100 characters.")]
+        [Required(ErrorMessage = "Nazwa firmy jest wymagana")]
+        [StringLength(100, ErrorMessage = "Nazwa firmymoże zawierać max 100 znaków")]
         public string CompanyName { get; set; } = string.Empty;
 
-        [StringLength(200, ErrorMessage = "Address cannot exceed 200 characters.")]
+        [StringLength(200, ErrorMessage = "Adres może składać się z max 200 znaków")]
         public string Address { get; set; } = string.Empty;
 
-        [StringLength(15, ErrorMessage = "Phone number cannot exceed 15 characters.")]
+        [RegularExpression(@"^\d{9,15}$", ErrorMessage = "Numer telefonu powinien zawierać minimum 9 cyfr (max 15)")]
         public string? PhoneNumber { get; set; }
 
-        [StringLength(10, ErrorMessage = "Tax ID number must be 10 characters.")]
+        [RegularExpression(@"\d{10}", ErrorMessage = "NIP powinien zawierać 10 cyfr")]
         public string? TaxIdNumber { get; set; }
 
-        [StringLength(9, ErrorMessage = "National Business Registry Number must be 9 characters.")]
+        [RegularExpression(@"^\d{9}|\d{14}$", ErrorMessage = "Regon powinien zawierać 9 lub 14 cyfr")]
         public string? NationalBusinessRegistryNumber { get; set; }
 
-        [StringLength(100, ErrorMessage = "Email cannot exceed 100 characters.")]
-        [EmailAddress(ErrorMessage = "Invalid email address format.")]
+        [StringLength(100, ErrorMessage = "Email może zawierać max 100 znaków")]
+        [EmailAddress(ErrorMessage = "Niepoprawny fomrat adresu")]
         public string? Email { get; set; }
 
         public DateTime CreatedAt { get; set; }

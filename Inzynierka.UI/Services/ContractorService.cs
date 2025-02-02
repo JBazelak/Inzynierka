@@ -30,7 +30,7 @@ namespace Inzynierka.UI.ControllerServices
             return _mapper.Map<ContractorDto>(contractor);
         }
 
-        
+
         public async Task UpdateAsync(int id, UpdateContractorDto updateContractorDto)
         {
             var contractor = await _context.Contractors.FindAsync(id);
@@ -56,6 +56,19 @@ namespace Inzynierka.UI.ControllerServices
             {
                 throw new ArgumentException("Company name is already taken.");
             }
+
+            if (!string.IsNullOrEmpty(updateContractorDto.TaxIdNumber) &&
+                await IsTaxIdNumberTakenAsync(updateContractorDto.TaxIdNumber, id))
+            {
+                throw new ArgumentException("Tax ID Number (NIP) is already taken.");
+            }
+
+            if (!string.IsNullOrEmpty(updateContractorDto.NationalBusinessRegistryNumber) &&
+                await IsNationalBusinessRegistryNumberTakenAsync(updateContractorDto.NationalBusinessRegistryNumber, id))
+            {
+                throw new ArgumentException("National Business Registry Number (REGON) is already taken.");
+            }
+
 
             _mapper.Map(updateContractorDto, contractor);
 
@@ -94,5 +107,18 @@ namespace Inzynierka.UI.ControllerServices
             return await _context.Contractors
                 .AnyAsync(c => c.CompanyName == companyName && (excludeId == null || c.Id != excludeId));
         }
+
+        private async Task<bool> IsTaxIdNumberTakenAsync(string taxIdNumber, int? excludeId = null)
+        {
+            return await _context.Contractors
+                .AnyAsync(c => c.TaxIdNumber == taxIdNumber && (excludeId == null || c.Id != excludeId));
+        }
+
+        private async Task<bool> IsNationalBusinessRegistryNumberTakenAsync(string registryNumber, int? excludeId = null)
+        {
+            return await _context.Contractors
+                .AnyAsync(c => c.NationalBusinessRegistryNumber == registryNumber && (excludeId == null || c.Id != excludeId));
+        }
+
     }
 }

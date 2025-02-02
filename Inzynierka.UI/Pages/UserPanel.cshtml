@@ -1,0 +1,68 @@
+﻿@page
+@model UserPanelModel
+@{
+    ViewData["Title"] = "User Panel";
+}
+
+<h2>Your Projects</h2>
+
+@if (!string.IsNullOrEmpty(Model.ErrorMessage))
+{
+    <div class="alert alert-danger">@Model.ErrorMessage</div>
+}
+
+@if(!string.IsNullOrEmpty(Model.SuccessMessage)){
+    <div class="alert alert-success"></div>
+}
+
+@if (Model.Projects != null && Model.Projects.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nazwa projektu</th>
+                <th>Opis</th>
+                <th>Całkowity koszt</th>
+                <th>Akcje</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var project in Model.Projects)
+            {
+                <tr>
+                    <td>@project.Name</td>
+                    <td>@project.Description</td>
+                    <td>@project.TotalCost.ToString("C")</td>
+                    <td>
+                        <a asp-page="/ManageMaterials"
+                           asp-route-contractorId="@Model.ContractorId"
+                           asp-route-projectId="@project.Id"
+                           class="btn btn-warning">Zarządzaj</a>
+
+                        <form method="post"
+                              asp-page-handler="DeleteProject"
+                              asp-route-contractorId="@Model.ContractorId"
+                              asp-route-id="@project.Id"
+                              style="display:inline;">
+                            <button type="submit" class="btn btn-danger">Usuń</button>
+                        </form>
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>Nie znaleziono projektów. Dodaj swój pierwszy projekt poniżej.</p>
+}
+
+<form method="post" asp-page-handler="Logout">
+    <button type="submit" class="btn btn-danger">Wyloguj</button>
+</form>
+
+<a asp-page="/AddProject"
+   asp-route-contractorId="@Model.ContractorId"
+   class="btn btn-primary"
+   method="get">Dodaj nowy projekt</a>

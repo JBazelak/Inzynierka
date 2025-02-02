@@ -25,16 +25,16 @@ namespace Inzynierka.UI.DTOs
         [EmailAddress]
         public string Email { get; set; } = string.Empty;
 
-        [StringLength(200, ErrorMessage = "Address cannot exceed 200 characters.")]
+        [StringLength(200, ErrorMessage = "Adres może zawierać maksymalnie 200 znaków")]
         public string Address { get; set; } = string.Empty;
 
-        [StringLength(15, ErrorMessage = "Phone number cannot exceed 15 characters.")]
+        [RegularExpression(@"^\d{9,15}$", ErrorMessage = "Numer telefonu powinien zawierać minimum 9 cyfr (max 15)")]
         public string? PhoneNumber { get; set; }
 
-        [StringLength(10, ErrorMessage = "Tax ID number must be 10 characters.")]
+        [RegularExpression(@"\d{10}", ErrorMessage = "NIP powinien zawierać 10 cyfr")]
         public string? TaxIdNumber { get; set; }
 
-        [StringLength(9, ErrorMessage = "National Business Registry Number must be 9 characters.")]
+        [RegularExpression(@"^\d{9}|\d{14}$", ErrorMessage = "Regon powinien zawierać 9 lub 14 cyfr")]
         public string? NationalBusinessRegistryNumber { get; set; }
     }
 }

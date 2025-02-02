@@ -44,9 +44,11 @@ namespace Inzynierka.UI.Controllers
                 HttpContext.Session.SetString("UserId", contractor.Id.ToString());
                 HttpContext.Session.SetString("UserName", contractor.FirstName);
 
-                Console.WriteLine($"UserId: {HttpContext.Session.GetString("UserId")}");
-                Console.WriteLine($"UserName: {HttpContext.Session.GetString("UserName")}");
-                return Ok(new { Message = "Login successful." });
+                return Ok(new
+                {
+                    Message = "Login successful.",
+                    UserId = contractor.Id.ToString()
+                });
             }
             catch (UnauthorizedAccessException e)
             {

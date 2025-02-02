@@ -12,7 +12,6 @@ public class RegisterModel : PageModel
 
     public string successMessage { get; set; } = string.Empty;
     public string errorMessage { get; set; } = string.Empty;
-    public bool IsSecondStep { get; set; }
 
     private readonly IHttpClientFactory _httpClientFactory;
 
@@ -24,26 +23,17 @@ public class RegisterModel : PageModel
     public void OnGet()
     {
         registerData = new RegisterContractorDto();
-        IsSecondStep = false;
     }
 
-    public async Task<IActionResult> OnPostAsync(string step)
+    public async Task<IActionResult> OnPostAsync()
     {
-        ModelState.Remove("step");
-        if (step == "1")
+        if (!ModelState.IsValid)
         {
             if (registerData.Password != PasswordRepeat)
             {
-                errorMessage = "Please fill all fields correctly and ensure passwords match.";
+                errorMessage = "Hasła są różne";
                 return Page();
             }
-
-            IsSecondStep = true;
-            return Page();
-        }
-
-        if (!ModelState.IsValid)
-        {
 
             foreach (var entry in ModelState)
             {
@@ -56,7 +46,7 @@ public class RegisterModel : PageModel
                 }
             }
 
-            errorMessage = "Please fill all fields correctly.";
+            errorMessage = "Proszę usupełnić wszystkiepola poprawnie";
             return Page();
         }
 
@@ -69,19 +59,19 @@ public class RegisterModel : PageModel
 
             if (response.IsSuccessStatusCode)
             {
-                successMessage = "Registration successful! You can now log in.";
-                return RedirectToPage("/Login");
+                successMessage = "Zarejestrowano pomyślnie! Możesz się teraz zalogować";
+                return Page();
             }
             else
             {
                 var errorResponse = await response.Content.ReadAsStringAsync();
-                errorMessage = $"Error: {errorResponse}";
+                errorMessage = $"Wystąpił błąd: {errorResponse}";
                 return Page();
             }
         }
         catch (HttpRequestException ex)
         {
-            errorMessage = $"An error occurred: {ex.Message}";
+            errorMessage = $"Wystąpił błąd: {ex.Message}";
             return Page();
         }
     }

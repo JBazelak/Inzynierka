@@ -1,6 +1,7 @@
 using Inzynierka.UI.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Text.Json;
 
 public class LoginModelPage : PageModel
 {
@@ -36,23 +37,36 @@ public class LoginModelPage : PageModel
 
             if (response.IsSuccessStatusCode)
             {
+                // Parsowanie odpowiedzi JSON
+                var responseData = await response.Content.ReadFromJsonAsync<JsonElement>();
+                var userId = responseData.GetProperty("userId").GetString();
+                Console.WriteLine($"Response: {responseData}");
 
-                return RedirectToPage("/Index");
+                if (!string.IsNullOrEmpty(userId))
+                {
+                    // Ustawienie sesji
+                    HttpContext.Session.SetString("UserId", userId);
+                    Console.WriteLine($"Sesja ustawiona: UserId = {userId}");
+                }
+
+                return RedirectToPage("/UserPanel");
             }
             else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
             {
-                ErrorMessage = "Invalid email or password.";
+                ErrorMessage = "Niepoprawny email lub has³o";
             }
             else
             {
-                ErrorMessage = "An unexpected error occurred. Please try again.";
+                ErrorMessage = "Wyst¹pi³ nieoczekiwany problem. Spróbuj ponownie";
             }
         }
-        catch
+        catch (Exception ex)
         {
-            ErrorMessage = "An error occurred while connecting to the server.";
+            ErrorMessage = $"An error occurred while connecting to the server: {ex.Message}";
         }
 
         return Page();
     }
+
+
 }

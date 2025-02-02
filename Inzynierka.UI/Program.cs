@@ -5,16 +5,29 @@ using Inzynierka.UI.Mappings;
 using Inzynierka.UI.Services;
 using Microsoft.AspNetCore.Http.Features;
 using Inzynierka.Infrastructure.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(30); 
-    options.Cookie.HttpOnly = true; 
-    options.Cookie.IsEssential = true; 
+    options.Cookie.Name = ".AdventureWorks.Session";
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.IsEssential = true;
 });
 
+// Configure authentication with cookies
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/api/auth/login"; // Path to the login page
+        options.LogoutPath = "/api/auth/logout"; // Path to the logout page
+        //options.AccessDeniedPath = "/Account/AccessDenied"; 
+        options.Cookie.Name = "AdventureWorksAuthCookie";
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+        options.SlidingExpiration = true;
+    });
 
 
 builder.Services.AddRazorPages();
@@ -34,7 +47,6 @@ QuestPDF.Settings.EnableDebugging = true;
 
 var app = builder.Build();
 
-
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
@@ -42,12 +54,14 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-
-
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
+
+// Add authentication and authorization middleware
+app.UseAuthentication();
 app.UseAuthorization();
+
 app.UseSession();
 app.MapRazorPages();
 app.MapControllers();

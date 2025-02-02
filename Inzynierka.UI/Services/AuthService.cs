@@ -26,6 +26,18 @@ namespace Inzynierka.UI.Services
                 throw new ArgumentException("Email already exists.");
             }
 
+            if (!string.IsNullOrEmpty(registerDto.TaxIdNumber) &&
+                await _context.Contractors.AnyAsync(c => c.TaxIdNumber == registerDto.TaxIdNumber))
+            {
+                throw new ArgumentException("Tax ID Number (NIP) already exists.");
+            }
+
+            if (!string.IsNullOrEmpty(registerDto.NationalBusinessRegistryNumber) &&
+                await _context.Contractors.AnyAsync(c => c.NationalBusinessRegistryNumber == registerDto.NationalBusinessRegistryNumber))
+            {
+                throw new ArgumentException("National Business Registry Number (REGON) already exists.");
+            }
+
             var contractor = _mapper.Map<Contractor>(registerDto);
 
             contractor.Password = BCrypt.Net.BCrypt.HashPassword(registerDto.Password);

@@ -1,0 +1,191 @@
+﻿@page "/ManageMaterials/{contractorId:int}/{projectId:int}"
+@model ManageMaterialsModel
+@{
+	ViewData["Title"] = "Manage Materials";
+}
+
+<h2>Materiały projektu @Model.ProjectName</h2>
+
+@if (!string.IsNullOrEmpty(Model.ErrorMessage))
+{
+	<div class="alert alert-danger">@Model.ErrorMessage</div>
+}
+
+@if (!string.IsNullOrEmpty(Model.SuccessMessage))
+{
+	<div class="alert alert-success">@Model.SuccessMessage</div>
+}
+
+@if (Model.Materials != null && Model.Materials.Any())
+{
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Nazwa</th>
+				<th>Ilość</th>
+				<th>Jednostka</th>
+				<th>Cena za Jednostkę</th>
+				<th>Całkowity koszt</th>
+				<th>Akcje</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var material in Model.Materials)
+			{
+				<tr>
+					<td>@material.Name</td>
+					<td>@material.Quantity</td>
+					<td>@material.Unit</td>
+					<td>@material.PricePerUnit.ToString("C")</td>
+					<td>@material.TotalCost.ToString("C")</td>
+					<td>
+						<button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editMaterialModal"
+								data-material-id="@material.Id"
+								data-material-name="@material.Name"
+								data-material-quantity="@material.Quantity"
+								data-material-unit="@material.Unit"
+								data-material-price="@material.PricePerUnit">
+							Edytuj
+						</button>
+
+						<button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#uploadAttachmentModal" data-material-id="@material.Id" @(material.HasAttachment ? "disabled" : "")>Dodaj załącznik</button>
+					</td>
+					<td>
+						@if (material.HasAttachment)
+						{
+							<span class="badge bg-success">Dodano załącznik</span>
+						}
+						else
+						{
+							<span class="badge bg-danger">Brak załącznika</span>
+						}
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+}
+else
+{
+	<p>Nie znaleziono materiałów dla tego projektu</p>
+}
+
+<!-- Add Material Button -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addMaterialModal">Dodaj materiał</button>
+
+<div class="mt-4">
+	<!-- Generate Report Button -->
+	<a class="btn btn-secondary" href="/ManageMaterials/@Model.ContractorId/@Model.ProjectId?handler=GenerateReport&projectId=@Model.ProjectId">
+		Generuj raport
+	</a>
+
+
+
+	<!-- Back to UserPanel Button -->
+	<form method="get" asp-page="/UserPanel" asp-route-contractorId="@Model.ContractorId" style="display:inline;">
+		<button type="submit" class="btn btn-dark">Wróć</button>
+	</form>
+</div>
+
+<!-- Add Material Modal -->
+<div class="modal fade" id="addMaterialModal" tabindex="-1" aria-labelledby="addMaterialModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="addMaterialModalLabel">Dodaj materiał</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<form method="post" asp-page-handler="AddMaterial">
+					<input type="hidden" name="contractorId" value="@Model.ContractorId" />
+					<input type="hidden" name="projectId" value="@Model.ProjectId" />
+					<div class="form-group">
+						<label for="Name">Nazwa:</label>
+						<input type="text" id="Name" name="NewMaterial.Name" class="form-control" required />
+					</div>
+					<div class="form-group">
+						<label for="Quantity">Ilość:</label>
+						<input type="number" id="Quantity" name="NewMaterial.Quantity" class="form-control" step="0.01" required />
+					</div>
+					<div class="form-group">
+						<label for="Unit">Jednostka:</label>
+						<input type="text" id="Unit" name="NewMaterial.Unit" class="form-control" required />
+					</div>
+					<div class="form-group">
+						<label for="PricePerUnit">Cena za jednostkę:</label>
+						<input type="number" id="PricePerUnit" name="NewMaterial.PricePerUnit" class="form-control" step="0.01" required />
+					</div>
+					<div class="modal-footer">
+						<button type="submit" class="btn btn-primary">Dodaj materiał</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div class="modal fade" id="editMaterialModal" tabindex="-1" aria-labelledby="editMaterialModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editMaterialModalLabel">Edytuj materiał</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" asp-page-handler="EditMaterial">
+                    <input type="hidden" name="contractorId" value="@Model.ContractorId" />
+                    <input type="hidden" name="projectId" value="@Model.ProjectId" />
+                    <input type="hidden" id="editMaterialId" name="EditMaterial.Id" />
+
+                    <div class="form-group">
+                        <label for="editName">Nazwa:</label>
+                        <input type="text" id="editName" name="EditMaterial.Name" class="form-control"  />
+                    </div>
+                    <div class="form-group">
+                        <label for="editQuantity">Ilość:</label>
+                        <input type="number" id="editQuantity" name="EditMaterial.Quantity" class="form-control" step="0.01"  />
+                    </div>
+                    <div class="form-group">
+                        <label for="editUnit">Jednostka:</label>
+                        <input type="text" id="editUnit" name="EditMaterial.Unit" class="form-control"  />
+                    </div>
+                    <div class="form-group">
+                        <label for="editPricePerUnit">Cena za jednostkę:</label>
+                        <input type="number" id="editPricePerUnit" name="EditMaterial.PricePerUnit" class="form-control" step="0.01"  />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success">Zapisz zmiany</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Upload Attachment Modal -->
+<div class="modal fade" id="uploadAttachmentModal" tabindex="-1" aria-labelledby="uploadAttachmentModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="uploadAttachmentModalLabel">Upload Attachment</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<form method="post" enctype="multipart/form-data" asp-page-handler="UploadAttachment">
+					<input type="hidden" name="materialId" id="uploadMaterialId" />
+					<div class="form-group">
+						<label for="file">Wybierz plik:</label>
+						<input type="file" id="file" name="UploadFile" class="form-control" required />
+					</div>
+					<div class="modal-footer">
+						<button type="submit" class="btn btn-primary">Wyślij</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="/js/setMaterialId.js"></script>
+<script src="/js/fillEditForm.js"></script>

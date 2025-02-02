@@ -2,18 +2,33 @@
 using Inzynierka.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 using Inzynierka.UI.Interfaces;
+using Inzynierka.UI.DTOs;
+using AutoMapper;
 
 namespace Inzynierka.UI.Services
 {
     public class MaterialService : IMaterialService
     {
         private readonly AppDbContext _context;
-        private readonly List<string> _allowedExtensions = new List<string> { ".pdf", ".jpg", ".png", ".jpeg" }; 
+        private readonly List<string> _allowedExtensions = new List<string> { ".pdf", ".jpg", ".png", ".jpeg" };
+        private readonly IMapper _mapper;
 
-        public MaterialService(AppDbContext context)
+        public MaterialService(AppDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
+
         }
+
+        public async Task<IEnumerable<MaterialDto>> GetAllMaterialsAsync(int projectId)
+        {
+            var materials = await _context.Materials
+                .Where(m => m.ProjectId == projectId)
+                .ToListAsync();
+
+            return _mapper.Map<IEnumerable<MaterialDto>>(materials);
+        }
+
 
         public async Task<Material?> GetMaterialAsync(int projectId, int materialId)
         {
@@ -21,6 +36,58 @@ namespace Inzynierka.UI.Services
                 .Include(m => m.Project)
                 .FirstOrDefaultAsync(m => m.ProjectId == projectId && m.Id == materialId);
         }
+
+        public async Task<MaterialDto> AddMaterialAsync(int contractorId, int projectId, CreateMaterialDto createMaterialDto)
+        {
+            var contractorExists = await _context.Contractors.AnyAsync(c => c.Id == contractorId);
+            if (!contractorExists)
+                throw new KeyNotFoundException($"Wykonawca z ID {contractorId} nie został znaleziony.");
+
+            // Sprawdzenie istnienia projektu
+            var project = await _context.Projects
+                .FirstOrDefaultAsync(p => p.Id == projectId && p.ContractorId == contractorId);
+
+            if (project == null)
+                throw new KeyNotFoundException("Nie znaleziono projektu");
+
+            // Dodanie materiału
+            var material = _mapper.Map<Material>(createMaterialDto);
+            material.ProjectId = projectId;
+
+            _context.Materials.Add(material);
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<MaterialDto>(material);
+        }
+
+
+
+        public async Task UpdateMaterialAsync(int contractorId, int projectId, int materialId, UpdateMaterialDto updateMaterialDto)
+        {
+            var material = await _context.Materials
+                .Include(m => m.Project)
+                .FirstOrDefaultAsync(m => m.Project.ContractorId == contractorId && m.ProjectId == projectId && m.Id == materialId);
+
+            if (material == null)
+                throw new KeyNotFoundException("Material not found.");
+
+            if (!string.IsNullOrEmpty(updateMaterialDto.Name))
+                material.Name = updateMaterialDto.Name;
+
+            if (updateMaterialDto.Quantity.HasValue)
+                material.Quantity = updateMaterialDto.Quantity.Value;
+
+            if (!string.IsNullOrEmpty(updateMaterialDto.Unit))
+                material.Unit = updateMaterialDto.Unit;
+
+            if (updateMaterialDto.PricePerUnit.HasValue)
+                material.PricePerUnit = updateMaterialDto.PricePerUnit.Value;
+
+            material.LastUpdated = DateTime.UtcNow;
+
+            await _context.SaveChangesAsync();
+        }
+
 
 
         public async Task<string> UploadAttachmentAsync(Material material, IFormFile file)

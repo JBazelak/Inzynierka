@@ -22,6 +22,7 @@ namespace Inzynierka.UI.Services
         public async Task<IEnumerable<ProjectDto>> GetAllAsync(int contractorId)
         {
             var projects = await _context.Projects
+                .Include(p => p.Materials)
                 .Where(p => p.ContractorId == contractorId)
                 .ToListAsync();
             return _mapper.Map<IEnumerable<ProjectDto>>(projects);
@@ -80,45 +81,7 @@ namespace Inzynierka.UI.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<MaterialDto> AddMaterialAsync(int contractorId, int projectId, CreateMaterialDto createMaterialDto)
-        {
-            var contractorExists = await _context.Contractors.AnyAsync(c => c.Id == contractorId);
-            if (!contractorExists)
-                throw new KeyNotFoundException($"Contractor with ID {contractorId} not found.");
-
-            // Sprawdzenie istnienia projektu
-            var project = await _context.Projects
-                .FirstOrDefaultAsync(p => p.Id == projectId && p.ContractorId == contractorId);
-
-            if (project == null)
-                throw new KeyNotFoundException("Project not found.");
-
-            // Dodanie materiału
-            var material = _mapper.Map<Material>(createMaterialDto);
-            material.ProjectId = projectId;
-
-            _context.Materials.Add(material);
-            await _context.SaveChangesAsync();
-
-            return _mapper.Map<MaterialDto>(material);
-        }
-
-
-
-        public async Task UpdateMaterialAsync(int contractorId, int projectId, int materialId, UpdateMaterialDto updateMaterialDto)
-        {
-            var material = await _context.Materials
-                .Include(m => m.Project)
-                .FirstOrDefaultAsync(m => m.Project.ContractorId == contractorId && m.ProjectId == projectId && m.Id == materialId);
-
-            if (material == null)
-                throw new KeyNotFoundException("Material not found.");
-
-            _mapper.Map(updateMaterialDto, material);
-            material.LastUpdated = DateTime.UtcNow;
-
-            await _context.SaveChangesAsync();
-        }
+        
 
         public async Task<decimal> GetProjectCostAsync(int projectId)
         {

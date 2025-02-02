@@ -1,9 +1,11 @@
-﻿using Inzynierka.UI.Interfaces;
+﻿using Inzynierka.UI.DTOs;
+using Inzynierka.UI.Interfaces;
+using Inzynierka.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Inzynierka.UI.Controllers
 {
-    [Route("api/contractors/{contractorId}/projects/{projectId}/materials/{materialId}/attachments")]
+    [Route("api/contractors/{contractorId}/projects/{projectId}/materials/")]
     [ApiController]
     public class MaterialController : ControllerBase
     {
@@ -21,7 +23,65 @@ namespace Inzynierka.UI.Controllers
             return await _contractorService.ContractorExistsAsync(contractorId);
         }
 
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<MaterialDto>>> GetAllMaterials(int contractorId, int projectId)
+        {
+            if (!await ContractorExistsAsync(contractorId))
+            {
+                return NotFound("Contractor not found.");
+            }
+
+            try
+            {
+                var materials = await _materialService.GetAllMaterialsAsync(projectId);
+                return Ok(materials);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return NotFound(e.Message);
+            }
+        }
+
         [HttpPost]
+        public async Task<ActionResult> AddMaterial(int contractorId, int projectId, [FromBody] CreateMaterialDto createMaterialDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            try
+            {
+                var material = await _materialService.AddMaterialAsync(contractorId, projectId, createMaterialDto);
+                return Created($"api/contractors/{contractorId}/projects/{projectId}/materials/{material.Id}", material);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return NotFound(e.Message);
+            }
+        }
+
+        [HttpPut("{materialId}")]
+        public async Task<ActionResult> UpdateMaterial(int contractorId, int projectId, int materialId, [FromBody] UpdateMaterialDto updateMaterialDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            try
+            {
+                await _materialService.UpdateMaterialAsync(contractorId, projectId, materialId, updateMaterialDto);
+                return NoContent();
+            }
+            catch (KeyNotFoundException e)
+            {
+                return NotFound(e.Message);
+            }
+            catch (ArgumentException e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+
+        [HttpPost("{materialId}/attachments")]
         public async Task<IActionResult> UploadAttachment(int contractorId, int projectId, int materialId, [FromForm] IFormFile file)
         {
             if (!await ContractorExistsAsync(contractorId))
@@ -34,8 +94,6 @@ namespace Inzynierka.UI.Controllers
             }
             try
             {
-                
-
                 var material = await _materialService.GetMaterialAsync(projectId, materialId);
                 if (material == null)
                 {
