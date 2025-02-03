@@ -51,7 +51,7 @@ public class RegisterModel : PageModel
         }
 
         var _httpClient = _httpClientFactory.CreateClient();
-        _httpClient.BaseAddress = new Uri("https://localhost:7255");
+        _httpClient.BaseAddress = new Uri("https://material-manager.azurewebsites.net");
 
         try
         {

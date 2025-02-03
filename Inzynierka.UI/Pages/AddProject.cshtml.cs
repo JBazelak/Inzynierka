@@ -36,7 +36,7 @@ public class AddProjectModel : PageModel
         try
         {
             var httpClient = _httpClientFactory.CreateClient();
-            httpClient.BaseAddress = new Uri("https://localhost:7255");
+            httpClient.BaseAddress = new Uri("https://material-manager.azurewebsites.net");
 
             var response = await httpClient.PostAsJsonAsync($"api/contractors/{userId}/projects", NewProject);
             if (response.IsSuccessStatusCode)

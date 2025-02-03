@@ -15,7 +15,7 @@ public class LoginModelPage : PageModel
     public LoginModelPage(IHttpClientFactory httpClientFactory)
     {
         _httpClient = httpClientFactory.CreateClient();
-        _httpClient.BaseAddress = new Uri("https://localhost:7255");
+        _httpClient.BaseAddress = new Uri("https://material-manager.azurewebsites.net");
     }
 
     public void OnGet()

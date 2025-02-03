@@ -120,7 +120,7 @@ public class ManageMaterialsModel : PageModel
         try
         {
             var httpClient = _httpClientFactory.CreateClient();
-            httpClient.BaseAddress = new Uri("https://localhost:7255");
+            httpClient.BaseAddress = new Uri("https://material-manager.azurewebsites.net");
 
             var response = await httpClient.PutAsJsonAsync(
                 $"api/contractors/{contractorId}/projects/{projectId}/materials/{EditMaterial.Id}", EditMaterial);
@@ -154,7 +154,7 @@ public class ManageMaterialsModel : PageModel
         try
         {
             var httpClient = _httpClientFactory.CreateClient();
-            httpClient.BaseAddress = new Uri("https://localhost:7255");
+            httpClient.BaseAddress = new Uri("https://material-manager.azurewebsites.net");
 
             // Pobranie pliku jako strumienia
             var response = await httpClient.GetAsync($"api/projects/{projectId}/report");
@@ -194,7 +194,7 @@ public class ManageMaterialsModel : PageModel
         try
         {
             var httpClient = _httpClientFactory.CreateClient();
-            httpClient.BaseAddress = new Uri("https://localhost:7255");
+            httpClient.BaseAddress = new Uri("https://material-manager.azurewebsites.net");
 
             using var content = new MultipartFormDataContent();
             content.Add(new StreamContent(UploadFile.OpenReadStream()), "file", UploadFile.FileName);
