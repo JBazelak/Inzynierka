@@ -57,7 +57,7 @@ public class LoginModelPage : PageModel
             }
             else
             {
-                ErrorMessage = "Wyst¹pi³ nieoczekiwany problem. Spróbuj ponownie";
+                ErrorMessage = "Wystapil nieoczekiwany problem. Sprobuj ponownie";
             }
         }
         catch (Exception ex)

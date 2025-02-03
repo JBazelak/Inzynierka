@@ -37,7 +37,7 @@ public class UserPanelModel : PageModel
         try
         {
             var httpClient = _httpClientFactory.CreateClient();
-            httpClient.BaseAddress = new Uri("https://localhost:7255");
+            httpClient.BaseAddress = new Uri("https://material-manager.azurewebsites.net/");
 
             var sessionToken = HttpContext.Session.GetString("SessionToken");
             if (!string.IsNullOrEmpty(sessionToken))
@@ -72,7 +72,7 @@ public class UserPanelModel : PageModel
     public async Task<IActionResult> OnPostLogoutAsync()
     {
         var httpClient = _httpClientFactory.CreateClient();
-        httpClient.BaseAddress = new Uri("https://localhost:7255");
+        httpClient.BaseAddress = new Uri("https://material-manager.azurewebsites.net/");
 
         try
         {
@@ -102,7 +102,7 @@ public class UserPanelModel : PageModel
         try
         {
             var httpClient = _httpClientFactory.CreateClient();
-            httpClient.BaseAddress = new Uri("https://localhost:7255");
+            httpClient.BaseAddress = new Uri("https://material-manager.azurewebsites.net/");
 
             var sessionToken = HttpContext.Session.GetString("SessionToken");
             if (!string.IsNullOrEmpty(sessionToken))

@@ -37,7 +37,7 @@ public class ManageMaterialsModel : PageModel
         try
         {
             var httpClient = _httpClientFactory.CreateClient();
-            httpClient.BaseAddress = new Uri("https://localhost:7255");
+            httpClient.BaseAddress = new Uri("https://material-manager.azurewebsites.net/");
 
             var response = await httpClient.PostAsJsonAsync(
                 $"api/contractors/{contractorId}/projects/{projectId}/materials", NewMaterial);
@@ -82,7 +82,7 @@ public class ManageMaterialsModel : PageModel
         try
         {
             var httpClient = _httpClientFactory.CreateClient();
-            httpClient.BaseAddress = new Uri("https://localhost:7255");
+            httpClient.BaseAddress = new Uri("https://material-manager.azurewebsites.net/");
 
 
             var projectResponse = await httpClient.GetAsync($"api/contractors/{contractorId}/projects/{projectId}");
