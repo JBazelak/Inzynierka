@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
     options.Cookie.Name = ".AdventureWorks.Session";
@@ -23,7 +24,6 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     {
         options.LoginPath = "/api/auth/login"; // Path to the login page
         options.LogoutPath = "/api/auth/logout"; // Path to the logout page
-        //options.AccessDeniedPath = "/Account/AccessDenied"; 
         options.Cookie.Name = "AdventureWorksAuthCookie";
         options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
         options.SlidingExpiration = true;
