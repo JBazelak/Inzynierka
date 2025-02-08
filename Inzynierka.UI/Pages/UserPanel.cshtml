@@ -59,11 +59,14 @@ else
     <p>Nie znaleziono projektów. Dodaj swój pierwszy projekt poniżej.</p>
 }
 
-<form method="post" asp-page-handler="Logout">
-    <button type="submit" class="btn btn-danger">Wyloguj</button>
-</form>
+<div style="display:flex">
+    <form method="post" asp-page-handler="Logout">
+        <button type="submit" class="btn btn-danger" style="margin-right: 10px">Wyloguj</button>
+    </form>
 
-<a asp-page="/AddProject"
-   asp-route-contractorId="@Model.ContractorId"
-   class="btn btn-primary"
-   method="get">Dodaj nowy projekt</a>
+    <a asp-page="/AddProject"
+       asp-route-contractorId="@Model.ContractorId"
+       class="btn btn-primary"
+       method="get">Dodaj nowy projekt</a>
+</div>
+
