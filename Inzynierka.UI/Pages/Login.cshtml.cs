@@ -40,20 +40,17 @@ public class LoginModelPage : PageModel
                 // Parsowanie odpowiedzi JSON
                 var responseData = await response.Content.ReadFromJsonAsync<JsonElement>();
                 var userId = responseData.GetProperty("userId").GetString();
-                Console.WriteLine($"Response: {responseData}");
 
                 if (!string.IsNullOrEmpty(userId))
                 {
-                    // Ustawienie sesji
                     HttpContext.Session.SetString("UserId", userId);
-                    Console.WriteLine($"Sesja ustawiona: UserId = {userId}");
                 }
 
                 return RedirectToPage("/UserPanel");
             }
             else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
             {
-                ErrorMessage = "Niepoprawny email lub has³o";
+                ErrorMessage = "Niepoprawny email lub haslo";
             }
             else
             {

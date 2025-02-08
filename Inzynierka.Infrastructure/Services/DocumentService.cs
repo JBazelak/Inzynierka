@@ -2,6 +2,7 @@
 using Inzynierka.Infrastructure.Utils;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
+using System.Globalization;
 
 namespace Inzynierka.Infrastructure.Services
 {
@@ -102,18 +103,18 @@ namespace Inzynierka.Infrastructure.Services
                                     .Border(1)
                                     .BorderColor(Colors.Grey.Darken1)
                                     .Padding(2)
-                                    .Text($"{material.PricePerUnit:C}").AlignRight();
+                                    .Text($"{material.PricePerUnit.ToString("C", new CultureInfo("pl-PL"))}").AlignRight();
 
                                 table.Cell().Background(Colors.Grey.Lighten5)
                                     .Border(1)
                                     .BorderColor(Colors.Grey.Darken1)
                                     .Padding(2)
-                                    .Text($"{material.TotalCost:C}").AlignRight();
+                                    .Text($"{material.TotalCost.ToString("C", new CultureInfo("pl-PL"))}").AlignRight();
                             }
                         });
 
 
-                        stack.Item().AlignRight().Text($"Project Cost: {project.Materials.Sum(m => m.TotalCost):C}");
+                        stack.Item().AlignRight().Text($"Project Cost: {project.Materials.Sum(m => m.TotalCost).ToString("C", new CultureInfo("pl-PL"))}");
                     });
 
                     page.Footer().Background(Colors.Grey.Darken2).AlignCenter().Text(text =>

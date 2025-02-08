@@ -1,4 +1,5 @@
 ﻿@page
+@using System.Globalization
 @model UserPanelModel
 @{
     ViewData["Title"] = "User Panel";
@@ -32,7 +33,7 @@
                 <tr>
                     <td>@project.Name</td>
                     <td>@project.Description</td>
-                    <td>@project.TotalCost.ToString("C")</td>
+                    <td>@project.TotalCost.ToString("C", new CultureInfo("pl-PL"))</td>
                     <td>
                         <a asp-page="/ManageMaterials"
                            asp-route-contractorId="@Model.ContractorId"
