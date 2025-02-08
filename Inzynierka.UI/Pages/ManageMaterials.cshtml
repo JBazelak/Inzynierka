@@ -1,4 +1,5 @@
 ﻿@page "/ManageMaterials/{contractorId:int}/{projectId:int}"
+@using System.Globalization
 @model ManageMaterialsModel
 @{
 	ViewData["Title"] = "Manage Materials";
@@ -36,8 +37,8 @@
 					<td>@material.Name</td>
 					<td>@material.Quantity</td>
 					<td>@material.Unit</td>
-					<td>@material.PricePerUnit.ToString("C")</td>
-					<td>@material.TotalCost.ToString("C")</td>
+					<td>@material.PricePerUnit.ToString("C", new CultureInfo("pl-PL"))</td>
+					<td>@material.TotalCost.ToString("C", new CultureInfo("pl-PL"))</td>
 					<td>
 						<button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editMaterialModal"
 								data-material-id="@material.Id"
