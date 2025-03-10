@@ -1,9 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Net.Http;
-using System.Net.Http.Json;
-using System.Threading.Tasks;
-using Inzynierka.UI.DTOs;
+using Inzynierka.Application.DTOs;
 
 public class AddProjectModel : PageModel
 {

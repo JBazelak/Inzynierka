@@ -1,6 +1,6 @@
-﻿using Inzynierka.UI.DTOs;
+﻿using Inzynierka.Application.DTOs;
 using Inzynierka.UI.Filters;
-using Inzynierka.UI.Interfaces;
+using Inzynierka.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Inzynierka.UI.Controllers

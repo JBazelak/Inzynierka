@@ -1,13 +1,12 @@
 ﻿using AutoMapper;
 using Inzynierka.Infrastructure.Persistance;
-using Inzynierka.Infrastructure.Services;
 using Inzynierka.Core.Entities;
-using Inzynierka.UI.DTOs;
-using Inzynierka.UI.Interfaces;
-using Microsoft.EntityFrameworkCore;
 using Inzynierka.Application.DTOs;
+using Inzynierka.Application.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
-namespace Inzynierka.UI.Services
+
+namespace Inzynierka.Application.Services
 {
     public class ProjectService : IProjectService
     {

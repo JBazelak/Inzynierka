@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Inzynierka.Core.Entities;
-using Inzynierka.UI.DTOs;
+using Inzynierka.Application.DTOs;
 
 namespace Inzynierka.UI.Mappings
 {

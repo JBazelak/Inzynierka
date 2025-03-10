@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Inzynierka.UI.DTOs;
-using Inzynierka.UI.Interfaces;
+using Inzynierka.Application.DTOs;
+using Inzynierka.Application.Interfaces;
 using Inzynierka.UI.Filters;
 
 [ApiController]

@@ -1,4 +1,4 @@
-﻿using Inzynierka.UI.DTOs;
+﻿using Inzynierka.Application.DTOs;
 using System.ComponentModel.DataAnnotations;
 
 namespace Inzynierka.Application.DTOs

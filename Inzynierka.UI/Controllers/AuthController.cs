@@ -1,4 +1,4 @@
-﻿using Inzynierka.UI.DTOs;
+﻿using Inzynierka.Application.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Inzynierka.UI.Controllers

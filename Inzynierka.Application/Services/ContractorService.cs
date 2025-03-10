@@ -1,11 +1,10 @@
 ﻿using AutoMapper;
 using Inzynierka.Infrastructure.Persistance;
-using Inzynierka.UI.Interfaces;
-using Inzynierka.UI.DTOs;
+using Inzynierka.Application.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Inzynierka.Application.DTOs;
 
-namespace Inzynierka.UI.ControllerServices
+namespace Inzynierka.Application.ControllerServices
 {
     public class ContractorService : IContractorService
     {

@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Inzynierka.UI.DTOs;
+using Inzynierka.Application.DTOs;
 
 public class UserPanelModel : PageModel
 {

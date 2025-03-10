@@ -1,6 +1,6 @@
-﻿using Inzynierka.UI.DTOs;
-using Inzynierka.UI.Interfaces;
-using Inzynierka.UI.Services;
+﻿using Inzynierka.Application.DTOs;
+using Inzynierka.Application.Interfaces;
+using Inzynierka.Application.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Inzynierka.UI.Controllers

@@ -1,12 +1,10 @@
 using Infrastructure.Extensions;
-using Inzynierka.UI.Interfaces;
-using Inzynierka.UI.ControllerServices;
+using Inzynierka.Application.Interfaces;
+using Inzynierka.Application.ControllerServices;
 using Inzynierka.UI.Mappings;
-using Inzynierka.UI.Services;
-using Microsoft.AspNetCore.Http.Features;
+using Inzynierka.Application.Services;
 using Inzynierka.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,8 +20,8 @@ builder.Services.AddSession(options =>
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.LoginPath = "/api/auth/login"; // Path to the login page
-        options.LogoutPath = "/api/auth/logout"; // Path to the logout page
+        options.LoginPath = "/api/auth/login"; 
+        options.LogoutPath = "/api/auth/logout"; 
         options.Cookie.Name = "AdventureWorksAuthCookie";
         options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
         options.SlidingExpiration = true;
