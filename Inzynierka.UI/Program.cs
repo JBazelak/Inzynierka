@@ -1,6 +1,5 @@
-using Infrastructure.Extensions;
+using Inzynierka.Infrastructure.Extensions;
 using Inzynierka.Application.Interfaces;
-using Inzynierka.Application.ControllerServices;
 using Inzynierka.UI.Mappings;
 using Inzynierka.Application.Services;
 using Inzynierka.Infrastructure.Services;
@@ -32,10 +31,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddControllers();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddAutoMapper(typeof(MappingProfile));
-builder.Services.AddScoped<IContractorService, ContractorService>();
 builder.Services.AddScoped<IProjectService, ProjectService>();
-builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<IMaterialService, MaterialService>();
 builder.Services.AddScoped<PdfReportService>();
 builder.Services.AddDirectoryBrowser();
 builder.Services.AddHttpClient();

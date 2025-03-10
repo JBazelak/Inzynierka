@@ -21,7 +21,6 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\Inzynierka.Core\Inzynierka.Core.csproj" />
-		<ProjectReference Include="..\Inzynierka.Infrastructure\Inzynierka.Infrastructure.csproj" />
 	</ItemGroup>
 
 </Project>

@@ -1,54 +1,36 @@
 ﻿using AutoMapper;
 using Inzynierka.Core.Entities;
-using Inzynierka.Infrastructure.Persistance;
 using Inzynierka.Application.DTOs;
-using Microsoft.EntityFrameworkCore;
+using Inzynierka.Application.Interfaces;
 
 namespace Inzynierka.Application.Services
 {
     public class AuthService : IAuthService
     {
-        private readonly AppDbContext _context;
+        private readonly IAuthRepository _authRepository;
+        private readonly ICompanyDataValidator _companyDataValidator;
         private readonly IMapper _mapper;
 
-        public AuthService(AppDbContext context, IMapper mapper)
+        public AuthService(IAuthRepository authRepository, ICompanyDataValidator contractorValidator, IMapper mapper)
         {
-            _context = context;
+            _authRepository = authRepository;
+            _companyDataValidator = contractorValidator;
             _mapper = mapper;
         }
 
         public async Task RegisterAsync(RegisterContractorDto registerDto)
         {
-            if (await _context.Contractors.AnyAsync(c => c.Email == registerDto.Email))
-            {
-                throw new ArgumentException("Email already exists.");
-            }
-
-            if (!string.IsNullOrEmpty(registerDto.TaxIdNumber) &&
-                await _context.Contractors.AnyAsync(c => c.TaxIdNumber == registerDto.TaxIdNumber))
-            {
-                throw new ArgumentException("Tax ID Number (NIP) already exists.");
-            }
-
-            if (!string.IsNullOrEmpty(registerDto.NationalBusinessRegistryNumber) &&
-                await _context.Contractors.AnyAsync(c => c.NationalBusinessRegistryNumber == registerDto.NationalBusinessRegistryNumber))
-            {
-                throw new ArgumentException("National Business Registry Number (REGON) already exists.");
-            }
+            await _companyDataValidator.ValidateCompanyDataAsync(registerDto.Email, registerDto.TaxIdNumber, registerDto.NationalBusinessRegistryNumber);
 
             var contractor = _mapper.Map<Contractor>(registerDto);
-
             contractor.Password = BCrypt.Net.BCrypt.HashPassword(registerDto.Password);
 
-            _context.Contractors.Add(contractor);
-            await _context.SaveChangesAsync();
+            await _authRepository.AddUserAsync(contractor);
         }
-
 
         public async Task<Contractor> LoginAsync(LoginContractorDto loginDto)
         {
-            var contractor = await _context.Contractors
-                .FirstOrDefaultAsync(c => c.Email == loginDto.Email);
+            var contractor = await _authRepository.GetUserByEmailAsync(loginDto.Email);
 
             if (contractor == null || !BCrypt.Net.BCrypt.Verify(loginDto.Password, contractor.Password))
             {

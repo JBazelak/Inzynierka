@@ -10,9 +10,9 @@ namespace Inzynierka.UI.Controllers
     public class MaterialController : ControllerBase
     {
         private readonly IMaterialService _materialService;
-        private readonly IContractorService _contractorService;
+        private readonly IContractorRepository _contractorService;
 
-        public MaterialController(IMaterialService materialService, IContractorService contractorService)
+        public MaterialController(IMaterialService materialService, IContractorRepository contractorService)
         {
             _materialService = materialService;
             _contractorService = contractorService;
