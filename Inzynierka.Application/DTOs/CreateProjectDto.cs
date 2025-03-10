@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Inzynierka.UI.DTOs
+namespace Inzynierka.Application.DTOs
 {
     public class CreateProjectDto
     {

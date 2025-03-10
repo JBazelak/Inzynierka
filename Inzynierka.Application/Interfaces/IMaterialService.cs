@@ -1,7 +1,8 @@
-﻿using Inzynierka.Core.Entities;
-using Inzynierka.UI.DTOs;
+﻿using Inzynierka.Application.DTOs;
+using Inzynierka.Core.Entities;
+using Microsoft.AspNetCore.Http;
 
-namespace Inzynierka.UI.Interfaces
+namespace Inzynierka.Application.Interfaces
 {
     public interface IMaterialService
     {

@@ -5,6 +5,7 @@ using Inzynierka.Core.Entities;
 using Inzynierka.UI.DTOs;
 using Inzynierka.UI.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Inzynierka.Application.DTOs;
 
 namespace Inzynierka.UI.Services
 {

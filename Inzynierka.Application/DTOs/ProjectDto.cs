@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Inzynierka.UI.DTOs
+namespace Inzynierka.Application.DTOs
 {
     public class ProjectDto
     {

@@ -74,46 +74,53 @@ public class ManageMaterialsModel : PageModel
         return RedirectToPage(new { contractorId, projectId });
     }
 
-    public async Task<IActionResult> OnGetAsync(int contractorId, int projectId)
+public async Task<IActionResult> OnGetAsync(int contractorId, int projectId)
+{
+    ContractorId = contractorId;
+    ProjectId = projectId;
+
+    try
     {
-        ContractorId = contractorId;
-        ProjectId = projectId;
+        var httpClient = _httpClientFactory.CreateClient();
+        httpClient.BaseAddress = new Uri("https://material-manager.azurewebsites.net/");
 
-        try
+        var projectResponse = await httpClient.GetAsync($"api/contractors/{contractorId}/projects/{projectId}");
+        if (projectResponse.IsSuccessStatusCode)
         {
-            var httpClient = _httpClientFactory.CreateClient();
-            httpClient.BaseAddress = new Uri("https://material-manager.azurewebsites.net/");
+            var project = await projectResponse.Content.ReadFromJsonAsync<ProjectDto>();
+            ProjectName = project?.Name ?? "Unknown Project";
+        }
+        else
+        {
+            ProjectName = "Unknown Project";
+            ErrorMessage = "Failed to load project details.";
+        }
 
-
-            var projectResponse = await httpClient.GetAsync($"api/contractors/{contractorId}/projects/{projectId}");
-            if (projectResponse.IsSuccessStatusCode)
+        var materialsResponse = await httpClient.GetAsync($"api/contractors/{contractorId}/projects/{projectId}/materials");
+        if (materialsResponse.IsSuccessStatusCode)
+        {
+            var materials = await materialsResponse.Content.ReadFromJsonAsync<List<MaterialDto>>();
+            if (materials != null)
             {
-                var project = await projectResponse.Content.ReadFromJsonAsync<ProjectDto>();
-                ProjectName = project?.Name ?? "Unknown Project";
+                Materials = materials;
             }
             else
             {
-                ProjectName = "Unknown Project";
-                ErrorMessage = "Failed to load project details.";
-            }
-
-            var materialsResponse = await httpClient.GetAsync($"api/contractors/{contractorId}/projects/{projectId}/materials");
-            if (materialsResponse.IsSuccessStatusCode)
-            {
-                Materials = await materialsResponse.Content.ReadFromJsonAsync<List<MaterialDto>>();
-            }
-            else
-            {
-                ErrorMessage = "Failed to load materials.";
+                ErrorMessage = "Failed to deserialize materials.";
             }
         }
-        catch (HttpRequestException ex)
+        else
         {
-            ErrorMessage = $"Error: {ex.Message}";
+            ErrorMessage = "Failed to load materials.";
         }
-
-        return Page();
     }
+    catch (HttpRequestException ex)
+    {
+        ErrorMessage = $"Error: {ex.Message}";
+    }
+
+    return Page();
+}
 
     public async Task<IActionResult> OnPostEditMaterialAsync(int contractorId, int projectId)
     {

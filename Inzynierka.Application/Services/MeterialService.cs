@@ -1,11 +1,12 @@
 ﻿using Inzynierka.Infrastructure.Persistance;
 using Inzynierka.Core.Entities;
 using Microsoft.EntityFrameworkCore;
-using Inzynierka.UI.Interfaces;
-using Inzynierka.UI.DTOs;
+using Inzynierka.Application.Interfaces;
+using Inzynierka.Application.DTOs;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
 
-namespace Inzynierka.UI.Services
+namespace Inzynierka.Application.Services
 {
     public class MaterialService : IMaterialService
     {

@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
 using Inzynierka.Core.Entities;
 using Inzynierka.Infrastructure.Persistance;
-using Inzynierka.UI.DTOs;
+using Inzynierka.Application.DTOs;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Inzynierka.UI.Services
+namespace Inzynierka.Application.Services
 {
     public class AuthService : IAuthService
     {

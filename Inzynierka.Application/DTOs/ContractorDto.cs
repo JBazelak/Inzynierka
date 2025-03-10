@@ -1,6 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Inzynierka.UI.DTOs;
+using System.ComponentModel.DataAnnotations;
 
-namespace Inzynierka.UI.DTOs
+namespace Inzynierka.Application.DTOs
 {
     public class ContractorDto
     {

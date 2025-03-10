@@ -1,5 +1,5 @@
 ﻿using Inzynierka.Core.Entities;
-using Inzynierka.UI.DTOs;
+using Inzynierka.Application.DTOs;
 
 public interface IAuthService
 {

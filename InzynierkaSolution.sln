@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Inzynierka.Core", "Inzynier
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Inzynierka.Infrastructure", "Inzynierka.Infrastructure\Inzynierka.Infrastructure.csproj", "{AAA956EB-C350-4351-A6DA-C548DACE53ED}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Inzynierka.Application", "Inzynierka.Application\Inzynierka.Application.csproj", "{F3EFA36A-58F2-43A5-9519-678F7E1206C1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +31,10 @@ Global
 		{AAA956EB-C350-4351-A6DA-C548DACE53ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AAA956EB-C350-4351-A6DA-C548DACE53ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AAA956EB-C350-4351-A6DA-C548DACE53ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3EFA36A-58F2-43A5-9519-678F7E1206C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3EFA36A-58F2-43A5-9519-678F7E1206C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3EFA36A-58F2-43A5-9519-678F7E1206C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3EFA36A-58F2-43A5-9519-678F7E1206C1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -37,5 +43,9 @@ Global
 		{027894B6-3313-48A6-954B-A37A9674F438} = {49C7ECAA-A722-4315-8DF0-31DE12E399FE}
 		{BF703137-B79F-4669-A4D8-F202CDFB7B5D} = {49C7ECAA-A722-4315-8DF0-31DE12E399FE}
 		{AAA956EB-C350-4351-A6DA-C548DACE53ED} = {49C7ECAA-A722-4315-8DF0-31DE12E399FE}
+		{F3EFA36A-58F2-43A5-9519-678F7E1206C1} = {49C7ECAA-A722-4315-8DF0-31DE12E399FE}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D377F59F-16B9-49C7-99BA-FF2FD8047890}
 	EndGlobalSection
 EndGlobal

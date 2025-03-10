@@ -3,6 +3,7 @@ using Inzynierka.Infrastructure.Persistance;
 using Inzynierka.UI.Interfaces;
 using Inzynierka.UI.DTOs;
 using Microsoft.EntityFrameworkCore;
+using Inzynierka.Application.DTOs;
 
 namespace Inzynierka.UI.ControllerServices
 {

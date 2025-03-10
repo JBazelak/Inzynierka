@@ -1,6 +1,6 @@
-﻿using Inzynierka.UI.DTOs;
+﻿using Inzynierka.Application.DTOs;
 
-namespace Inzynierka.UI.Interfaces
+namespace Inzynierka.Application.Interfaces
 {
     public interface IContractorService
     {
