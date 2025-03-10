@@ -25,7 +25,9 @@ namespace Inzynierka.Infrastructure.Extensions
 
             // Rejestracja serwisów aplikacyjnych
             services.AddScoped<IMaterialService, MaterialService>();
-            services.AddScoped<IProjectService, ProjectService>();  
+            services.AddScoped<IProjectService, ProjectService>();
+            services.AddScoped<IContractorService, ContractorService>();
+            services.AddScoped<IAuthService, AuthService>();
 
             // Rejestracja walidatorów
             services.AddScoped<ICompanyDataValidator, CompanyDataValidator>();
