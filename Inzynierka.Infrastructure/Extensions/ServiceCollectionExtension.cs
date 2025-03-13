@@ -29,7 +29,7 @@ namespace Inzynierka.Infrastructure.Extensions
             services.AddScoped<IContractorService, ContractorService>();
             services.AddScoped<IAuthService, AuthService>();
 
-            // Rejestracja walidatorów
+            // Rejestracja walidatorówgit
             services.AddScoped<ICompanyDataValidator, CompanyDataValidator>();
             services.AddScoped<IMaterialValidator, MaterialValidator>();
         }
