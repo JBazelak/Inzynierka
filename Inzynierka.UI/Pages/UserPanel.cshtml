@@ -12,8 +12,9 @@
     <div class="alert alert-danger">@Model.ErrorMessage</div>
 }
 
-@if(!string.IsNullOrEmpty(Model.SuccessMessage)){
-    <div class="alert alert-success"></div>
+@if (!string.IsNullOrEmpty(Model.SuccessMessage))
+{
+    <div class="alert alert-success">@Model.SuccessMessage</div>
 }
 
 @if (Model.Projects != null && Model.Projects.Any())
@@ -46,7 +47,6 @@
                               style="display:inline;">
                             <button type="submit" class="btn btn-danger">Usuń</button>
                         </form>
-
                     </td>
                 </tr>
             }
@@ -68,4 +68,3 @@ else
        class="btn btn-primary"
        method="get">Dodaj nowy projekt</a>
 </div>
-
