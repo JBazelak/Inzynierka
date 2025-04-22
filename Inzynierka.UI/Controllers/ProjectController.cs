@@ -32,7 +32,7 @@ namespace Inzynierka.UI.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<CreateProjectDto>> GetById(int contractorId, int id)
+        public async Task<ActionResult<ProjectDto>> GetById(int contractorId, int id)
         {
             try
             {

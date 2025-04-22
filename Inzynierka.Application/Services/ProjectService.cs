@@ -8,13 +8,13 @@ namespace Inzynierka.Application.Services
     public class ProjectService : IProjectService
     {
         private readonly IProjectRepository _projectRepository;
-        private readonly IMaterialValidator _projectMaterialValidator;
+        private readonly IMaterialValidator _materialValidator;
         private readonly IMapper _mapper;
 
-        public ProjectService(IProjectRepository projectRepository, IMaterialValidator projectMaterialValidator, IMapper mapper)
+        public ProjectService(IProjectRepository projectRepository, IMaterialValidator materialValidator, IMapper mapper)
         {
             _projectRepository = projectRepository;
-            _projectMaterialValidator = projectMaterialValidator;
+            _materialValidator = materialValidator;
             _mapper = mapper;
         }
 
@@ -35,8 +35,7 @@ namespace Inzynierka.Application.Services
 
         public async Task<ProjectDto> CreateAsync(int contractorId, CreateProjectDto projectDto)
         {
-            await _projectMaterialValidator.ValidateProjectExistsAsync(contractorId, 0);
-
+            
             var project = _mapper.Map<Project>(projectDto);
             project.ContractorId = contractorId;
 

@@ -12,13 +12,13 @@ public class AddProjectModel : PageModel
     }
 
     [BindProperty]
-    public ProjectDto NewProject { get; set; }
+    public CreateProjectDto NewProject { get; set; }
 
     public string ErrorMessage { get; set; }
 
     public void OnGet()
     {
-        NewProject = new ProjectDto();
+        NewProject = new CreateProjectDto();
         ErrorMessage = string.Empty;
     }
 
