@@ -43,12 +43,13 @@ namespace Inzynierka.UI.Controllers
 
                 HttpContext.Session.SetString("UserId", contractor.Id.ToString());
                 HttpContext.Session.SetString("UserName", contractor.FirstName);
-
+                Console.WriteLine($"UserId: {contractor.Id}");
                 return Ok(new
                 {
                     Message = "Login successful.",
                     UserId = contractor.Id.ToString()
                 });
+                
             }
             catch (UnauthorizedAccessException e)
             {

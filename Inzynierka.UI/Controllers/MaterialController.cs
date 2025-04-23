@@ -1,11 +1,13 @@
 ﻿using Inzynierka.Application.DTOs;
 using Inzynierka.Application.Interfaces;
 using Inzynierka.Application.Services;
+using Inzynierka.UI.Filters;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Inzynierka.UI.Controllers
 {
     [Route("api/contractors/{contractorId}/projects/{projectId}/materials/")]
+    [SessionAuthorization]
     [ApiController]
     public class MaterialController : ControllerBase
     {

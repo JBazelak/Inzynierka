@@ -95,8 +95,14 @@ public class UserPanelModel : PageModel
         return Page();
     }
 
-    public async Task<IActionResult> OnPostDeleteProjectAsync(int contractorId, int id)
+    public async Task<IActionResult> OnPostDeleteProjectAsync(int id)
     {
+        var contractorIdString = HttpContext.Session.GetString("UserId");
+        if (string.IsNullOrEmpty(contractorIdString) || !int.TryParse(contractorIdString, out var contractorId))
+        {
+            return RedirectToPage("/Login");
+        }
+
         ContractorId = contractorId;
 
         try
@@ -130,7 +136,6 @@ public class UserPanelModel : PageModel
 
         return RedirectToPage();
     }
-
 
     public IActionResult OnPostAdd()
     {
